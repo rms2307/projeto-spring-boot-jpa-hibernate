@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.particular.projetospringbootjpahibernate.entities.User;
 import com.particular.projetospringbootjpahibernate.repositories.UserRepository;
+import com.particular.projetospringbootjpahibernate.services.exceptions.ResourceNotFoundException;
 
 @Service // Resgistro da classe como um componente do Spring
 public class UserService {
@@ -21,17 +22,17 @@ public class UserService {
 
 	public User findById(Long id) {
 		Optional<User> obj = repository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 
 	public User insert(User obj) {
 		return repository.save(obj);
 	}
-	
+
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
-	
+
 	public User update(Long id, User obj) {
 		User entity = repository.getOne(id);
 		updateData(entity, obj);
